@@ -25,6 +25,6 @@ jobs:
       - name: Send reminders
         working-directory: scripts
         env:
-          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.BONDHU_FUND_10_SECRET }}
         run: node send-reminders.js
         
