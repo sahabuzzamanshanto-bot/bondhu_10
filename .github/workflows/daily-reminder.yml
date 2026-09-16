@@ -4,7 +4,10 @@ on:
   schedule:
     # প্রতিদিন বাংলাদেশ সময় সন্ধ্যা ৭টায় চলবে (UTC 13:00, বাংলাদেশ = UTC+6)
     - cron: "0 13 * * *"
-  workflow_dispatch: {}   # চাইলে GitHub-এর Actions ট্যাব থেকে হাতেও চালানো যাবে (টেস্টের জন্য)
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
 
 jobs:
   send-reminders:
@@ -27,4 +30,12 @@ jobs:
         env:
           FIREBASE_SERVICE_ACCOUNT: ${{ secrets.BONDHU_FUND_10_SECRET }}
         run: node send-reminders.js
-        
+
+      - name: Keep repo active
+        run: |
+          echo "Last run: $(date -u)" > .last-run.txt
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add .last-run.txt
+          git commit -m "chore: keep-alive commit" || echo "Nothing to commit"
+          git push
